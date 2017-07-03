@@ -2,9 +2,8 @@ import React, { Component } from 'react'
 
 export class Book extends Component {
   render() {
+    const { book } = this.props
 
-    const book = this.props.book
-    console.log(book.imageLinks.smallThumbnail)
     return (
       <div className="book">
         <div className="book-top">

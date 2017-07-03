@@ -5,7 +5,7 @@ import { Book } from './Book'
 export class BookshelfSection extends Component {
   render() {
     let bookshelfSectionTitle = this.props.bookshelfSectionTitle
-    const books = this.props.books
+    const { books } = this.props
 
     return (
       <div className="bookshelf">
