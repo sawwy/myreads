@@ -1,5 +1,6 @@
 import React from 'react'
 import { Route, Link } from 'react-router-dom'
+import escapeRegExp from 'escape-string-regexp'
 
 import './App.css'
 import * as BooksAPI from './BooksAPI'
@@ -15,7 +16,8 @@ export default class BooksApp extends React.Component {
      * users can use the browser's back and forward buttons to navigate between
      * pages, as well as provide a good URL they can bookmark and share.
      */
-    books: []
+    books: [],
+    query: ''
   }
 
   handleBookUpdate = (e, book) => {
@@ -36,6 +38,10 @@ export default class BooksApp extends React.Component {
     )
   }
 
+  updateQuery = (query) => (
+    this.setState({ query: query.trim()})
+  )
+
   componentDidMount() {
     BooksAPI.getAll().then((books) => {
       this.setState({ books })
@@ -43,6 +49,15 @@ export default class BooksApp extends React.Component {
   }
 
   render() {
+    let showingBooks
+    if (this.state.query) {
+      const match = new RegExp(escapeRegExp(this.state.query), 'i')
+      showingBooks = this.state.books.filter(b => match.test(b.authors) || match.test(b.title) )
+    }
+    else {
+      showingBooks = this.state.books
+    }
+
     return (
       <div className="app">
         <Route path='/search' render={ ({history}) => (
@@ -51,13 +66,17 @@ export default class BooksApp extends React.Component {
               <div className="search-books-bar">
                 <Link to='/' className="close-search">Close</Link>
                 <div className="search-books-input-wrapper">
-                  <input type="text" placeholder="Search by title or author"/>
+                  <input
+                    type="text"
+                    placeholder="Search by title or author"
+                    value={this.state.query}
+                    onChange={(event) => (this.updateQuery(event.target.value))} />
                 </div>
               </div>
             </div>
             <div className="search-books-results">
               <ol className="books-grid">
-                {this.state.books.map( book => <Book history={history} update={this.handleBookUpdate} book={book} key={book.industryIdentifiers[0].identifier} />)}
+                {showingBooks.map( book => <Book history={history} update={this.handleBookUpdate} book={book} key={book.industryIdentifiers[0].identifier} />)}
               </ol>
             </div>
           </div>
