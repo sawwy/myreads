@@ -1,8 +1,8 @@
 import React from 'react'
 import { Route, Link } from 'react-router-dom'
-import * as BooksAPI from './BooksAPI'
-import './App.css'
 
+import './App.css'
+import * as BooksAPI from './BooksAPI'
 import { Bookshelf } from './components/Bookshelf'
 import { AddBook } from './components/AddBook'
 import { Book } from './components/Book'
@@ -18,6 +18,24 @@ export default class BooksApp extends React.Component {
     books: []
   }
 
+  handleBookUpdate = (e, book) => {
+    let toShelf = e.target.value
+
+    BooksAPI.update(book, toShelf)
+    .then(
+      this.setState((state) => ({
+        books: state.books.map(b => {
+          if (b.title === book.title) {
+            b.shelf = toShelf
+            return b
+          } else {
+            return b
+          }
+        })
+      }))
+    )
+  }
+
   componentDidMount() {
     BooksAPI.getAll().then((books) => {
       this.setState({ books })
@@ -27,7 +45,7 @@ export default class BooksApp extends React.Component {
   render() {
     return (
       <div className="app">
-        <Route path='/search' render={ () => (
+        <Route path='/search' render={ ({history}) => (
           <div>
             <div className="search-books">
               <div className="search-books-bar">
@@ -39,7 +57,7 @@ export default class BooksApp extends React.Component {
             </div>
             <div className="search-books-results">
               <ol className="books-grid">
-                {this.state.books.map( book => <Book book={book} key={book.industryIdentifiers[0].identifier} />)}
+                {this.state.books.map( book => <Book history={history} update={this.handleBookUpdate} book={book} key={book.industryIdentifiers[0].identifier} />)}
               </ol>
             </div>
           </div>
@@ -50,7 +68,7 @@ export default class BooksApp extends React.Component {
               <h1>MyReads</h1>
             </div>
             <div className="list-books-content">
-              <Bookshelf books={this.state.books}/>
+              <Bookshelf update={this.handleBookUpdate} books={this.state.books}/>
             </div>
           </div>
         )} />

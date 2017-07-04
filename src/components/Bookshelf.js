@@ -18,9 +18,9 @@ export class Bookshelf extends Component {
 
     return (
       <div>
-        <BookshelfSection books={wantToRead} bookshelfSectionTitle={'Want to Read'} />
-        <BookshelfSection books={currentlyReading} bookshelfSectionTitle={'Currently Reading'}/>
-        <BookshelfSection books={read} bookshelfSectionTitle={'Read'}/>
+        <BookshelfSection update={this.props.update} books={wantToRead} bookshelfSectionTitle={'Want to Read'} />
+        <BookshelfSection update={this.props.update} books={currentlyReading} bookshelfSectionTitle={'Currently Reading'}/>
+        <BookshelfSection update={this.props.update} books={read} bookshelfSectionTitle={'Read'}/>
       </div>
     )
   }

@@ -12,7 +12,7 @@ export class BookshelfSection extends Component {
         <h2 className="bookshelf-title">{bookshelfSectionTitle}</h2>
         <div className="bookshelf-books">
           <ol className="books-grid">
-            {books.map( book => <Book book={book} key={book.industryIdentifiers[0].identifier} />)}
+            {books.map( book => <Book update={this.props.update} book={book} key={book.industryIdentifiers[0].identifier} />)}
           </ol>
         </div>
       </div>
