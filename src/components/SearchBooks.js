@@ -22,7 +22,6 @@ export class SearchBooks extends Component {
 			)
 		}	
 		BooksAPI.search(query, maxResults).then(searchResults => {
-			console.log(searchResults)
 			if (searchResults.error) {
 				this.setState({
 					searchResults: [],
@@ -32,9 +31,7 @@ export class SearchBooks extends Component {
 				this.setState({ 
 					searchResults: searchResults.map(b => {
 							let index = myBooks.findIndex(myBook => myBook.id === b.id)
-							console.log(index)
 							if (index >= 0) {
-								console.log(myBooks[index].shelf)
 								b.shelf = myBooks[index].shelf
 								return b
 							} else {
@@ -47,21 +44,20 @@ export class SearchBooks extends Component {
 		})
 	}
 
-	updateQuery = (query, maxResults, myBooks) => {  
-    if (timeoutHandle) { window.clearTimeout(timeoutHandle)}
-    
+	updateQuery = (query, maxResults, myBooks) => {   
     this.setState({ 
       query: query.trim()
     })
-    let queryTimeStamp = Date.now()
-    console.log(queryTimeStamp)
-    let timeoutHandle = window.setTimeout(() => {
-    	this.searchBooks(query, maxResults, myBooks)	
-    }, 100)
+	  if (query.length > 0) {
+	    	this.searchBooks(query, maxResults, myBooks)	
+	  } else {
+	  	this.setState({
+	  		searchResults: []
+	  	})
+	  }
   }
 
 	render() {
-		console.log('Im rendering!')
 		const { handleBookUpdate, myBooks } = this.props
 		let showingBooks
     const maxResults = 20
@@ -86,7 +82,7 @@ export class SearchBooks extends Component {
 				</div>
 				<div className="search-books-results">
 				  <ol className="books-grid">
-				    {this.state.searchResults && this.state.query && this.state.loadingBooks ? <p>Loading</p> : showingBooks.map( book => <Book handleBookUpdate={handleBookUpdate} book={book} key={book.id} />)}
+				    {this.state.query && this.state.loadingBooks ? <p>Loading</p> : showingBooks.map( book => <Book handleBookUpdate={handleBookUpdate} book={book} key={book.id} />)}
 				  </ol>
 				</div>
       </div>
