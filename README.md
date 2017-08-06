@@ -2,7 +2,7 @@ This is a submission for the final assessment project for Udacity's React Fundam
 
 ## Installation instructions
 
-* [Clone the repository](https://github.com/sawwy/myreads)
+* Clone the repository `git clone https://github.com/sawwy/myreads`
 * Navigate to /myreads folder and run `npm install`
 * Once installed, run `npm start` and the application should launch in browser (localhost:3000)
 
