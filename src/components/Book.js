@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
 
 export class Book extends Component {
+  
   render() {
-    const { book } = this.props
+    const { book, handleBookUpdate } = this.props
+    console.log('Book', book)
+    console.log('Book Authors', book.authors)
 
     return (
       <div className="book">
@@ -10,8 +13,7 @@ export class Book extends Component {
           <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.smallThumbnail})` }}></div>
           <div className="book-shelf-changer">
             <select defaultValue={book.shelf} onChange={(e) => {
-                this.props.update(e, book)
-                this.props.history && this.props.history.push('/')
+                handleBookUpdate(e, book)
               }}>
               <option value="none" disabled>Move to...</option>
               <option value="currentlyReading">Currently Reading</option>
@@ -22,7 +24,7 @@ export class Book extends Component {
           </div>
         </div>
         <div className="book-title">{book.title}</div>
-        {book.authors.map((a) => <div className="book-authors" key={a.length + Math.random()}>{a}</div>)}
+        {book.authors && book.authors.map((a) => <div className="book-authors" key={a.length + Math.random()}>{a}</div>)}
       </div>
     )
   }
