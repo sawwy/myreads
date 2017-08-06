@@ -21,7 +21,8 @@ export default class BooksApp extends React.Component {
 
   handleBookUpdate = (e, book) => {
     let toShelf = e.target.value
-    if (this.state.books.indexOf(book)) {
+    console.log('Book Update', this.state.books.indexOf(book))
+    if (this.state.books.indexOf(book) >= 0) {
       BooksAPI.update(book, toShelf)
       .then(this.setState((state) => ({
         books: state.books.map(b => {
@@ -38,31 +39,28 @@ export default class BooksApp extends React.Component {
       BooksAPI.update(book, toShelf)
         .then(this.setState((state) => ({
           books: state.books.concat(book)
-        })))
-        .then(this.forceUpdate())
-      }  
-    }
-
-  componentWillReceiveProps(nextProps) {
-    console.log('nextProps', nextProps)
+      })))
+    }  
   }
 
   componentDidMount() {
     BooksAPI.getAll().then((books) => {
       this.setState({ books })
     })
-
-
   }
+
+  ShouldComponentUpdate() {
+    return true
+  }
+
 
   render() {  
     console.log('myBooks', this.state.books)
-    this.state.books && console.log('firstBook', this.state.books[6])
-    
+    console.log('props', this.props )
     return (
       <div className="app">
-        <Route path='/search' render={ ({history}) => (
-          <SearchBooks history={history} handleBookUpdate={this.handleBookUpdate} myBooks={this.state.books}/>
+        <Route path='/search' render={ () => (
+          <SearchBooks handleBookUpdate={this.handleBookUpdate} myBooks={this.state.books}/>
         )} />
         <Route exact path='/' render={() => (
           <div className="list-books">
